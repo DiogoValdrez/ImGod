@@ -10,6 +10,8 @@ public class Player : Mover
     private float knockbackStartTime2 = -1f;
     public float knockbackDuration2 = 0.2f;
 
+    public int hp = 5;
+
     private void Awake(){
         QualitySettings.vSyncCount = 0;  // VSync must be disabled
         Application.targetFrameRate = testFrameRate;
@@ -61,8 +63,9 @@ public class Player : Mover
     protected override void ReceiveDamage(Damage dmg){
         transform.GetComponent<Rigidbody2D>().velocity =  new Vector2(-1 * dmg.pushDirection * dmg.pushForce * speed, transform.GetComponent<Rigidbody2D>().velocity.y);
         knockbackStartTime2 = Time.time;
-        if(dmg.damageAmount>=2){
+        Debug.Log(hp = hp - dmg.damageAmount);
+        if(hp<=0){
             Death();
-        } 
+        }
     }
 }

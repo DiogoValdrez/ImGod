@@ -11,6 +11,7 @@ public class Enemy : Mover
     private float checkRadiusSide = 0.1f;
     private float knockbackStartTime;
     public float knockbackDuration = 2f;
+    public int hp = 2;
     
     [SerializeField]
     private int dir = 1;
@@ -39,7 +40,8 @@ public class Enemy : Mover
     protected override void ReceiveDamage(Damage dmg){
         transform.GetComponent<Rigidbody2D>().velocity =  new Vector2(dmg.pushDirection * dmg.pushForce * speed, transform.GetComponent<Rigidbody2D>().velocity.y);
         knockbackStartTime = Time.time;
-        if(dmg.damageAmount>=2){
+        hp = hp - dmg.damageAmount;
+        if(hp<=0){
             Death();
         }
     }

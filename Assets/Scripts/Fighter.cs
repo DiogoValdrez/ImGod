@@ -4,6 +4,7 @@ using UnityEngine;
 
 public abstract class Fighter : MonoBehaviour
 {
+
     protected virtual void Start()
     {
     }
