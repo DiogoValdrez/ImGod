@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public abstract class Character : Collidable
+public abstract class Mover : Fighter
 {
     // characteristics of player vars
     public float speed;
@@ -21,9 +21,9 @@ public abstract class Character : Collidable
     public Transform headPos;
     public float checkBonkRadius;
 
-    //Weapon
-    // public Object weapon;
     public Animator anim;
+
+
 
 
     protected override void Start()
@@ -36,20 +36,23 @@ public abstract class Character : Collidable
     {
         base.Update();
     }
-    protected virtual void UpdateMotor(Vector4 input)
+    protected virtual void UpdateMotor(Vector3 input)
     {
-        //move left and right
         rb.velocity = new Vector2(input.x * speed, rb.velocity.y);
 
-        if (input.x == 1){//trocar por animações
-            transform.GetChild(0).eulerAngles = new Vector3(0, 0, 0);
-        }else if (input.x == -1){
-            transform.GetChild(0).eulerAngles = new Vector3(0, 180, 0);
-        }
-        if (input.w == 2){
-            transform.GetChild(0).eulerAngles = new Vector3(0, 0, 90);
-        }else if (input.w == -2){
-            transform.GetChild(0).eulerAngles = new Vector3(0, 0, 0);
+        if(!anim.GetCurrentAnimatorStateInfo(0).IsName("weapon_swing")){
+            if (input.x == 1){//trocar por animações
+                transform.GetChild(0).eulerAngles = new Vector3(0, 0, 0);
+            }else if (input.x == -1){
+                transform.GetChild(0).eulerAngles = new Vector3(0, 180, 0);
+            }
+            if (input.z == 2){
+                transform.GetChild(0).eulerAngles = new Vector3(0, 0, 90);
+            }else if (input.z == -2){
+                transform.GetChild(0).eulerAngles = new Vector3(0, 0, 0);
+            }else if (input.z == 0 && transform.GetChild(0).eulerAngles == new Vector3(0, 0, 90)){
+                transform.GetChild(0).eulerAngles = new Vector3(0, 0, 0);
+            }
         }
         //jump
         isGrounded = Physics2D.OverlapCircle(feetPos.position, checkRadius, whatIsGround);//Check if a ground is in the radius of feet
@@ -78,16 +81,5 @@ public abstract class Character : Collidable
             rb.velocity = Vector2.down * jumpForce;         
             }
         }
-        
-        //attack
-        if(input.z==1){
-            Swing();
-        }
-
     }
-    protected void Swing()
-    {
-        anim.SetTrigger("Swing");
-    }
-
 }
